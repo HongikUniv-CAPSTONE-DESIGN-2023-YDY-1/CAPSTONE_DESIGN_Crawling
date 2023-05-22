@@ -16,7 +16,7 @@ from urllib.request import urlopen
 from urllib.error import URLError, HTTPError
 
 # 01. 이미지 저장 폴더 설정
-f_dir = 'C:/Users/KimBumYun/Desktop/Github/2023/crawling/'
+f_dir = 'C:/Users/KimBumYun/Desktop/Github/2023/CAPSTONE_DESIGN_Crawling/'
 #f_dir = input('이미지를 저장할 폴더(예:C:/Users/) : ')
 
 # 02. 시간 설정
@@ -27,7 +27,7 @@ dir_name = '사진저장'
 # 03. 이미지 저장 폴더 설정
 os.makedirs(f_dir + f_name + '-' + dir_name)
 os.chdir(f_dir + f_name + '-' + dir_name)
-f_result_dir = f_dir + f_name + '-' + dir_name
+f_result_dir = 'CU-' + f_dir + f_name + '-' + dir_name
 
 # 04. 상품 이름, 가격 저장 txt
 f = open(f_name + '.txt', 'w')
@@ -40,7 +40,12 @@ dr.set_window_size(1440, 1440)
 dr.get('https://cu.bgfretail.com/event/plus.do?category=event&depth2=1&sf=N')
 time.sleep(1)
 
-# 06. 스크롤
+# 06. 1+1
+choose = dr.find_element(By.XPATH, '//*[@id="contents"]/div[1]/ul/li[2]/a')
+choose.send_keys('\n')
+time.sleep(2)
+
+# 07. 스크롤
 scroll_count = 0
 while True:
     try:
@@ -54,7 +59,56 @@ while True:
 dr.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 time.sleep(1)
 
-# 07. 이미지 다운로드
+# 08. 이미지 다운로드
+images = dr.find_elements(By.CSS_SELECTOR, 'img.prod_img')
+
+ul_count = 1
+li_count = 1
+image_count = 1 
+image_full_count = 1
+
+for image in images:
+    try:
+        product_name = dr.find_element(By.XPATH, '//*[@id="contents"]/div[2]/div/ul[' + str(ul_count) + ']/li[' + str(li_count) + ']/a/div[1]/div[2]/div[1]/p').text
+        product_price = dr.find_element(By.XPATH, '//*[@id="contents"]/div[2]/div/ul[' + str(ul_count) + ']/li[' + str(li_count) + ']/a/div[1]/div[2]/div[2]/strong').text
+        f.write(str(image_full_count) + '-CU-ONE_PLUS_ONE-' + product_name + '-' + product_price + '\n')
+        imgUrl = dr.find_elements(By.CSS_SELECTOR, "img.prod_img")[image_count-1].get_attribute("src")
+        urllib.request.urlretrieve(imgUrl, str(image_count) + ".jpg")
+        image_full_count = image_full_count + 1
+        image_count = image_count + 1
+        li_count = li_count + 1
+        if int(li_count) == 41:
+            li_count = 1
+            ul_count = ul_count + 1
+    except HTTPError as e:
+        err = e.read()
+        code = e.getcode()
+        if code == int(404):
+            image_count = image_count + 1
+            li_count = li_count + 1
+        print(code)
+        continue
+
+# 06. 2+1
+choose = dr.find_element(By.XPATH, '//*[@id="contents"]/div[1]/ul/li[3]/a')
+choose.send_keys('\n')
+time.sleep(2)
+
+# 07. 스크롤
+scroll_count = 0
+while True:
+    try:
+        page_down = dr.find_element(By.XPATH, '//*[@id="contents"]/div[2]/div/div/div[1]/a')
+        page_down.send_keys('\n')
+        time.sleep(3)
+        scroll_count = scroll_count + 1
+    except:
+        break
+
+dr.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+time.sleep(1)
+
+# 08. 이미지 다운로드
 images = dr.find_elements(By.CSS_SELECTOR, 'img.prod_img')
 
 ul_count = 1
@@ -64,12 +118,11 @@ image_count = 1
 for image in images:
     try:
         product_name = dr.find_element(By.XPATH, '//*[@id="contents"]/div[2]/div/ul[' + str(ul_count) + ']/li[' + str(li_count) + ']/a/div[1]/div[2]/div[1]/p').text
-        print(product_name)
         product_price = dr.find_element(By.XPATH, '//*[@id="contents"]/div[2]/div/ul[' + str(ul_count) + ']/li[' + str(li_count) + ']/a/div[1]/div[2]/div[2]/strong').text
-        print(product_price)
-        f.write(str(image_count) + '_' + product_name + '_' + product_price + '\n')
+        f.write(str(image_full_count) + '-CU-TWO_PLUS_ONE-' + product_name + '-' + product_price + '\n')
         imgUrl= dr.find_elements(By.CSS_SELECTOR, "img.prod_img")[image_count-1].get_attribute("src")
         urllib.request.urlretrieve(imgUrl, str(image_count) + ".jpg")
+        image_full_count = image_full_count + 1
         image_count = image_count + 1
         li_count = li_count + 1
         if int(li_count) == 41:

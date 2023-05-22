@@ -16,7 +16,7 @@ from urllib.request import urlopen
 from urllib.error import URLError, HTTPError
 
 # 01. 이미지 저장 폴더 설정
-f_dir = 'C:/Users/KimBumYun/Desktop/crawling/'
+f_dir = 'C:/Users/KimBumYun/Desktop/Github/2023/CAPSTONE_DESIGN_Crawling/'
 #f_dir = input('이미지를 저장할 폴더(예:C:\\Users\\) : ')
 
 # 02. 시간 설정
@@ -53,7 +53,7 @@ for image in images:
             li_count = 1
             next_page = dr.find_element(By.XPATH, '//*[@id="contents"]/div[2]/div[3]/div/div/div[1]/div/a[3]')
             next_page.send_keys('\n')
-            time.sleep(0.1)
+            time.sleep(1)
         imgUrl = dr.find_element(By.XPATH, '//*[@id="contents"]/div[2]/div[3]/div/div/div[1]/ul/li[' + str(li_count) + ']/div/p[1]/img').get_attribute("src")
         urllib.request.urlretrieve(imgUrl, str(image_count) + ".jpg")
         print(str(image_count) + "___" + str(li_count))
@@ -64,6 +64,9 @@ for image in images:
         err = e.read()
         code = e.getcode()
         if code == int(404):
+            image_count = image_count + 1
+            li_count = li_count + 1
+        if code == int(403):
             image_count = image_count + 1
             li_count = li_count + 1
         print(code)

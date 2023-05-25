@@ -16,7 +16,7 @@ from urllib.request import urlopen
 from urllib.error import URLError, HTTPError
 
 # 01. 이미지 저장 폴더 설정
-f_dir = 'C:/Users/KimBumYun/Desktop/crawling/'
+f_dir = 'C:/Users/KimBumYun/Desktop/Github/2023/CAPSTONE_DESIGN_Crawling/'
 #f_dir = input('이미지를 저장할 폴더(예:C:\\Users\\) : ')
 
 # 02. 시간 설정

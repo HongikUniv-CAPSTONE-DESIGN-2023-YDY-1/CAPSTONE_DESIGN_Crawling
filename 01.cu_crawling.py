@@ -63,7 +63,7 @@ time.sleep(1)
 images = dr.find_elements(By.CSS_SELECTOR, 'img.prod_img')
 
 ul_count = 1
-li_count = 1
+li_count = 1    
 image_count = 1 
 image_full_count = 1
 

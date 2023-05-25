@@ -55,9 +55,8 @@ for image in images:
             next_page.send_keys('\n')
             time.sleep(1)
         imgUrl = dr.find_element(By.XPATH, '//*[@id="contents"]/div[2]/div[3]/div/div/div[1]/ul/li[' + str(li_count) + ']/div/p[1]/img').get_attribute("src")
-        urllib.request.urlretrieve(imgUrl, str(image_count) + ".jpg")
-        print(str(image_count) + "___" + str(li_count))
         print(imgUrl)
+        urllib.request.urlretrieve(imgUrl, str(image_count) + ".jpg")
         li_count = li_count + 1
         image_count = image_count + 1
     except HTTPError as e:

@@ -17,7 +17,6 @@ from urllib.error import URLError, HTTPError
 
 # 01. 이미지 저장 폴더 설정
 f_dir = 'C:/Users/KimBumYun/Desktop/Github/2023/CAPSTONE_DESIGN_Crawling/'
-#f_dir = input('이미지를 저장할 폴더(예:C:\\Users\\) : ')
 
 # 02. 시간 설정
 now = time.localtime()
@@ -35,15 +34,15 @@ s_time = time.time()
 
 # 04. 1+1 웹 열기
 dr = webdriver.Chrome("/chromedriver.exe")
-dr.set_window_size(1440, 1440)
+dr.set_window_size(1440, 1040)
 dr.get('https://www.emart24.co.kr/goods/event?search=&category_seq=1&align=')
 time.sleep(1)
+
+images = dr.find_elements(By.CSS_SELECTOR, 'img')
 
 li_count = 1
 image_count = 1
 page_count = 1
-
-images = dr.find_elements(By.XPATH, '/html/body/div[2]/div/section[4]/div[]/div[2]/img')
 
 for image in images:
     try:
@@ -55,8 +54,7 @@ for image in images:
         print(product_name)
         product_price = dr.find_element(By.XPATH, '/html/body/div[2]/div/section[4]/div[' + str(li_count) + ']/div[3]/span/a').text
         print(product_price)
-        f.write(str(image_count) + '-EMART-ONE_PLUS_ONE-' + product_name + '-' + product_price + '\n')
-        #imgUrl = dr.find_elements(By.CSS_SELECTOR, "img")[image_count].get_attribute("src")
+        f.write(str(image_count) + '-EMART24-ONE_PLUS_ONE-' + product_name + '-' + product_price + '\n')
         imgUrl = dr.find_element(By.XPATH, '/html/body/div[2]/div/section[4]/div[' + str(li_count) + ']/div[2]/img').get_attribute("src")
         urllib.request.urlretrieve(imgUrl, str(image_count) + ".jpg")
         li_count = li_count + 1

@@ -36,7 +36,7 @@ s_time = time.time()
 
 # 05. 웹 열기
 dr = webdriver.Chrome("/chromedriver.exe")
-dr.set_window_size(1440, 1440)
+dr.set_window_size(1000, 1000)
 dr.get('https://cu.bgfretail.com/event/plus.do?category=event&depth2=1&sf=N')
 time.sleep(1)
 
@@ -67,13 +67,14 @@ li_count = 1
 image_count = 1 
 image_full_count = 1
 
-for image in images:
+while True:
     try:
         product_name = dr.find_element(By.XPATH, '//*[@id="contents"]/div[2]/div/ul[' + str(ul_count) + ']/li[' + str(li_count) + ']/a/div[1]/div[2]/div[1]/p').text
         product_price = dr.find_element(By.XPATH, '//*[@id="contents"]/div[2]/div/ul[' + str(ul_count) + ']/li[' + str(li_count) + ']/a/div[1]/div[2]/div[2]/strong').text
         f.write(str(image_full_count) + '-CU-ONE_PLUS_ONE-' + product_name + '-' + product_price + '\n')
         imgUrl = dr.find_elements(By.CSS_SELECTOR, "img.prod_img")[image_count-1].get_attribute("src")
-        urllib.request.urlretrieve(imgUrl, str(image_count) + ".jpg")
+        os.system("curl " + imgUrl + " > " + str(image_full_count) + ".jpg")
+        #urllib.request.urlretrieve(imgUrl, str(image_full_count) + ".jpg")
         image_full_count = image_full_count + 1
         image_count = image_count + 1
         li_count = li_count + 1
@@ -84,17 +85,20 @@ for image in images:
         err = e.read()
         code = e.getcode()
         if code == int(404):
+            image_full_count = image_full_count + 1
             image_count = image_count + 1
             li_count = li_count + 1
         print(code)
         continue
+    except:
+        break
 
-# 06. 2+1
+# 09. 2+1
 choose = dr.find_element(By.XPATH, '//*[@id="contents"]/div[1]/ul/li[3]/a')
 choose.send_keys('\n')
 time.sleep(2)
 
-# 07. 스크롤
+# 10. 스크롤
 scroll_count = 0
 while True:
     try:
@@ -108,20 +112,21 @@ while True:
 dr.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 time.sleep(1)
 
-# 08. 이미지 다운로드
+# 11. 이미지 다운로드
 images = dr.find_elements(By.CSS_SELECTOR, 'img.prod_img')
 
 ul_count = 1
 li_count = 1
 image_count = 1 
 
-for image in images:
+while True:
     try:
         product_name = dr.find_element(By.XPATH, '//*[@id="contents"]/div[2]/div/ul[' + str(ul_count) + ']/li[' + str(li_count) + ']/a/div[1]/div[2]/div[1]/p').text
         product_price = dr.find_element(By.XPATH, '//*[@id="contents"]/div[2]/div/ul[' + str(ul_count) + ']/li[' + str(li_count) + ']/a/div[1]/div[2]/div[2]/strong').text
-        f.write(str(image_full_count) + '-CU-TWO_PLUS_ONE-' + product_name + '-' + product_price + '\n')
-        imgUrl= dr.find_elements(By.CSS_SELECTOR, "img.prod_img")[image_count-1].get_attribute("src")
-        urllib.request.urlretrieve(imgUrl, str(image_count) + ".jpg")
+        f.write(str(image_full_count) + '-CU-ONE_PLUS_ONE-' + product_name + '-' + product_price + '\n')
+        imgUrl = dr.find_elements(By.CSS_SELECTOR, "img.prod_img")[image_count-1].get_attribute("src")
+        os.system("curl " + imgUrl + " > " + str(image_full_count) + ".jpg")
+        #urllib.request.urlretrieve(imgUrl, str(image_full_count) + ".jpg")
         image_full_count = image_full_count + 1
         image_count = image_count + 1
         li_count = li_count + 1
@@ -132,12 +137,15 @@ for image in images:
         err = e.read()
         code = e.getcode()
         if code == int(404):
+            image_full_count = image_full_count + 1
             image_count = image_count + 1
             li_count = li_count + 1
         print(code)
         continue
+    except:
+        break
 
-# 08. 추출내용 정리
+# 12. 추출내용 정리
 f.close()
 
 e_time = time.time()#끝난시간 체크
@@ -146,6 +154,6 @@ t_time = e_time - s_time #크롤링에 쓰인 시간
 
 print('='*100)
 print('총 소요시간은 %s 초입니다.'%round(t_time, 1))
-print('총 저장 건수는 %s 건입니다.'%(image_count-1))
+print('총 저장 건수는 %s 건입니다.'%(image_full_count-1))
 print('파일 저장 경로: %s 입니다.'%f_result_dir)
 print('='*100)

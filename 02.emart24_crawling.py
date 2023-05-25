@@ -34,7 +34,7 @@ s_time = time.time()
 
 # 04. 1+1 웹 열기
 dr = webdriver.Chrome("/chromedriver.exe")
-dr.set_window_size(1440, 1040)
+dr.set_window_size(1000, 1000)
 dr.get('https://www.emart24.co.kr/goods/event?search=&category_seq=1&align=')
 time.sleep(1)
 
@@ -42,9 +42,11 @@ images = dr.find_elements(By.CSS_SELECTOR, 'img')
 
 li_count = 1
 image_count = 1
+image_full_count = 1
 page_count = 1
 
-for image in images:
+# 05. 이미지 다운로드
+while True:
     try:
         if int(li_count) == 21:
             li_count = 1
@@ -54,14 +56,67 @@ for image in images:
         print(product_name)
         product_price = dr.find_element(By.XPATH, '/html/body/div[2]/div/section[4]/div[' + str(li_count) + ']/div[3]/span/a').text
         print(product_price)
-        f.write(str(image_count) + '-EMART24-ONE_PLUS_ONE-' + product_name + '-' + product_price + '\n')
+        f.write(str(image_full_count) + '-EMART24-ONE_PLUS_ONE-' + product_name + '-' + product_price + '\n')
         imgUrl = dr.find_element(By.XPATH, '/html/body/div[2]/div/section[4]/div[' + str(li_count) + ']/div[2]/img').get_attribute("src")
-        urllib.request.urlretrieve(imgUrl, str(image_count) + ".jpg")
+        #os.system("curl " + imgUrl + " > " + str(image_full_count) + ".jpg")
+        urllib.request.urlretrieve(imgUrl, str(image_full_count) + ".jpg")
         li_count = li_count + 1
         image_count = image_count + 1
+        image_full_count = image_full_count + 1
+    except HTTPError as e:
+        err = e.read()
+        code = e.getcode()
+        if code == int(404):
+            image_full_count = image_full_count + 1
+            image_count = image_count + 1
+            li_count = li_count + 1
+        print(code)
+        continue
     except:
-        break        
+        break
+
+# 06. 2+1 웹 열기
+choose = dr.find_element(By.XPATH, '/html/body/div[2]/div/section[3]/ul/li[3]/a')
+choose.send_keys('\n')
+time.sleep(2)
+
+images = dr.find_elements(By.CSS_SELECTOR, 'img')
+
+li_count = 1
+image_count = 1
+page_count = 1
+
+# 07. 이미지 다운로드
+while True:
+    try:
+        if int(li_count) == 21:
+            li_count = 1
+            page_count = page_count + 1
+            dr.get('https://www.emart24.co.kr/goods/event?search=&page=' + str(page_count) + '&category_seq=2&align=')
+        product_name = dr.find_element(By.XPATH, '/html/body/div[2]/div/section[4]/div[' + str(li_count) + ']/div[3]/div/p/a').text
+        print(product_name)
+        product_price = dr.find_element(By.XPATH, '/html/body/div[2]/div/section[4]/div[' + str(li_count) + ']/div[3]/span/a').text
+        print(product_price)
+        f.write(str(image_full_count) + '-EMART24-TWO_PLUS_ONE-' + product_name + '-' + product_price + '\n')
+        imgUrl = dr.find_element(By.XPATH, '/html/body/div[2]/div/section[4]/div[' + str(li_count) + ']/div[2]/img').get_attribute("src")
+        #os.system("curl " + imgUrl + " > " + str(image_full_count) + ".jpg")
+        urllib.request.urlretrieve(imgUrl, str(image_full_count) + ".jpg")
+        li_count = li_count + 1
+        image_count = image_count + 1
+        image_full_count = image_full_count + 1
+    except HTTPError as e:
+        err = e.read()
+        code = e.getcode()
+        if code == int(404):
+            image_full_count = image_full_count + 1
+            image_count = image_count + 1
+            li_count = li_count + 1
+        print(code)
+        continue
+    except:
+        break
         
+# 08. 추출내용 정리
 e_time = time.time()#끝난시간 체크
 
 t_time = e_time - s_time #크롤링에 쓰인 시간 

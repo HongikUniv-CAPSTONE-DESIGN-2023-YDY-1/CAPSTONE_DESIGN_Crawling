@@ -27,13 +27,15 @@ dir_name = '사진저장'
 # 03. 이미지 저장 폴더 설정
 os.makedirs(f_dir+f_name+'-'+dir_name)
 os.chdir(f_dir+f_name+'-'+dir_name)
-f_result_dir=f_dir+f_name+'-'+dir_name
+f_result_dir='SEVEN'+f_name+'-'+dir_name
+
+f = open(f_name + '.txt', 'w')
 
 s_time = time.time()
 
 # 04. 웹 열기
 dr = webdriver.Chrome("/chromedriver.exe")
-dr.set_window_size(1440, 1440)
+dr.set_window_size(1000, 1000)
 dr.get('http://www.7-eleven.co.kr/product/presentList.asp')
 time.sleep(1)
 
@@ -51,7 +53,7 @@ while True:
         else:
             page_down = dr.find_element(By.XPATH, '//*[@id="moreImg"]/a')
         page_down.send_keys('\n')
-        time.sleep(0.5)
+        time.sleep(2)
         scroll_count = scroll_count + 1
     except:
         break
@@ -64,27 +66,93 @@ images = dr.find_elements(By.CSS_SELECTOR, 'img')
 
 li_count = 1
 image_count = 2
+image_full_count = 1
 
-for image in images:
+while True:
     try:
         if image_count <= 14:
-            imgUrl= dr.find_element(By.XPATH, '//*[@id="listUl"]/li[' + str(image_count) + ']/div/img').get_attribute("src")
-            urllib.request.urlretrieve(imgUrl, str(image_count) + ".jpg")
             product_name = dr.find_element(By.XPATH, '//*[@id="listUl"]/li[' + str(image_count) + ']/div/div/div[1]').text
-            print(product_name)
             product_price = dr.find_element(By.XPATH, '//*[@id="listUl"]/li[' + str(image_count) + ']/div/div/div[2]/span').text
-            print(product_price)
+            imgUrl = dr.find_element(By.XPATH, '//*[@id="listUl"]/li[' + str(image_count) + ']/div/img').get_attribute("src")
+            urllib.request.urlretrieve(imgUrl, str(image_full_count) + ".jpg")
+            f.write(str(image_full_count) + '-SEVEN-ONE_PLUS_ONE-' + product_name + '-' + product_price + '\n')
+            print(product_name + "_" + product_price)
         else:
-            imgUrl= dr.find_element(By.XPATH, '//*[@id="listUl"]/li[' + str(image_count) + ']/div/div/img').get_attribute("src")
-            urllib.request.urlretrieve(imgUrl, str(image_count) + ".jpg")
             product_name = dr.find_element(By.XPATH, '//*[@id="listUl"]/li[' + str(image_count) + ']/div/div/div/div[1]').text
-            print(product_name)
             product_price = dr.find_element(By.XPATH, '//*[@id="listUl"]/li[' + str(image_count) + ']/div/div/div/div[2]/span').text
-            print(product_price)
+            imgUrl = dr.find_element(By.XPATH, '//*[@id="listUl"]/li[' + str(image_count) + ']/div/div/img').get_attribute("src")
+            urllib.request.urlretrieve(imgUrl, str(image_full_count) + ".jpg")
+            f.write(str(image_full_count) + '-SEVEN-ONE_PLUS_ONE-' + product_name + '-' + product_price + '\n')
+            print(product_name + "_" + product_price)
+        image_full_count = image_full_count + 1
         image_count = image_count + 1
         li_count = li_count + 1
+    except HTTPError as e:
+        err = e.read()
+        code = e.getcode()
+        if code == int(404):
+            image_full_count = image_full_count + 1
+            image_count = image_count + 1
+            li_count = li_count + 1
+        print(code)
+        continue
     except:
-        pass
+        break
+
+choose = dr.find_element(By.XPATH, '//*[@id="actFrm"]/div[3]/div[1]/ul/li[2]/a')
+choose.send_keys('\n')
+time.sleep(2)
+
+scroll_count = 0
+# 06. 스크롤
+while True:
+    try:
+        if scroll_count == 0:
+            page_down = dr.find_element(By.XPATH, '//*[@id="listUl"]/li[15]/a')
+        else:
+            page_down = dr.find_element(By.XPATH, '//*[@id="moreImg"]/a')
+        page_down.send_keys('\n')
+        time.sleep(2)
+        scroll_count = scroll_count + 1
+    except:
+        break
+
+dr.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+time.sleep(1)
+
+li_count = 1
+image_count = 2
+
+while True:
+    try:
+        if image_count <= 14:
+            product_name = dr.find_element(By.XPATH, '//*[@id="listUl"]/li[' + str(image_count) + ']/div/div/div[1]').text
+            product_price = dr.find_element(By.XPATH, '//*[@id="listUl"]/li[' + str(image_count) + ']/div/div/div[2]/span').text
+            imgUrl = dr.find_element(By.XPATH, '//*[@id="listUl"]/li[' + str(image_count) + ']/div/img').get_attribute("src")
+            urllib.request.urlretrieve(imgUrl, str(image_full_count) + ".jpg")
+            f.write(str(image_full_count) + '-SEVEN-TWO_PLUS_ONE-' + product_name + '-' + product_price + '\n')
+            print(product_name + "_" + product_price)
+        else:
+            product_name = dr.find_element(By.XPATH, '//*[@id="listUl"]/li[' + str(image_count) + ']/div/div/div/div[1]').text
+            product_price = dr.find_element(By.XPATH, '//*[@id="listUl"]/li[' + str(image_count) + ']/div/div/div/div[2]/span').text
+            imgUrl = dr.find_element(By.XPATH, '//*[@id="listUl"]/li[' + str(image_count) + ']/div/div/img').get_attribute("src")
+            urllib.request.urlretrieve(imgUrl, str(image_full_count) + ".jpg")
+            f.write(str(image_full_count) + '-SEVEN-TWO_PLUS_ONE-' + product_name + '-' + product_price + '\n')
+            print(product_name + "_" + product_price)
+        image_full_count = image_full_count + 1
+        image_count = image_count + 1
+        li_count = li_count + 1
+    except HTTPError as e:
+        err = e.read()
+        code = e.getcode()
+        if code == int(404):
+            image_full_count = image_full_count + 1
+            image_count = image_count + 1
+            li_count = li_count + 1
+        print(code)
+        continue
+    except:
+        break
 
 e_time = time.time()#끝난시간 체크
 

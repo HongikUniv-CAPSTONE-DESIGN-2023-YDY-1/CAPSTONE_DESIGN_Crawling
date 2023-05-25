@@ -16,8 +16,8 @@ from urllib.request import urlopen
 from urllib.error import URLError, HTTPError
 
 # 01. 이미지 저장 폴더 설정
-f_dir = 'C:/Users/KimBumYun/Desktop/Github/2023/CAPSTONE_DESIGN_Crawling/'
 #f_dir = input('이미지를 저장할 폴더(예:C:\\Users\\) : ')
+f_dir = 'C:/Users/KimBumYun/Desktop/Github/2023/CAPSTONE_DESIGN_Crawling/'
 
 # 02. 시간 설정
 now = time.localtime()
@@ -25,9 +25,9 @@ f_name = '%04d-%02d-%02d-%02d-%02d-%02d' %(now.tm_year, now.tm_mon, now.tm_mday,
 dir_name = '사진저장'
 
 # 03. 이미지 저장 폴더 설정
-os.makedirs(f_dir+f_name+'-'+dir_name)
-os.chdir(f_dir+f_name+'-'+dir_name)
-f_result_dir='SEVEN'+f_name+'-'+dir_name
+os.makedirs(f_dir + f_name + '-' + dir_name)
+os.chdir(f_dir + f_name + '-' + dir_name)
+f_result_dir = 'SEVEN' + f_name + '-'+ dir_name
 
 f = open(f_name + '.txt', 'w')
 
@@ -41,11 +41,11 @@ time.sleep(1)
 
 # 05. 1+1 페이지
 oneone_page = dr.find_element(By.XPATH, '//*[@id="actFrm"]/div[3]/div[1]/ul/li[1]/a')
-#twoone_page = dr.find_element(By.XPATH, '//*[@id="actFrm"]/div[3]/div[1]/ul/li[2]/a')
 oneone_page.send_keys('\n')
 
-scroll_count = 0
 # 06. 스크롤
+scroll_count = 0
+
 while True:
     try:
         if scroll_count == 0:

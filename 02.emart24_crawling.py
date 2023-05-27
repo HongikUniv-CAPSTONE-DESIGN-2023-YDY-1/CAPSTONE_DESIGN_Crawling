@@ -123,6 +123,6 @@ t_time = e_time - s_time #크롤링에 쓰인 시간
 
 print('='*100)
 print('총 소요시간은 %s 초입니다.'%round(t_time, 1))
-print('총 저장 건수는 %s 건입니다.'%(image_count))
+print('총 저장 건수는 %s 건입니다.'%(image_full_count))
 print('파일 저장 경로: %s 입니다.'%f_result_dir)
 print('='*100)

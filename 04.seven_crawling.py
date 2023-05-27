@@ -53,7 +53,7 @@ while True:
         else:
             page_down = dr.find_element(By.XPATH, '//*[@id="moreImg"]/a')
         page_down.send_keys('\n')
-        time.sleep(2)
+        time.sleep(1)
         scroll_count = scroll_count + 1
     except:
         break
@@ -76,14 +76,12 @@ while True:
             imgUrl = dr.find_element(By.XPATH, '//*[@id="listUl"]/li[' + str(image_count) + ']/div/img').get_attribute("src")
             urllib.request.urlretrieve(imgUrl, str(image_full_count) + ".jpg")
             f.write(str(image_full_count) + '-SEVEN-ONE_PLUS_ONE-' + product_name + '-' + product_price + '\n')
-            print(product_name + "_" + product_price)
         else:
             product_name = dr.find_element(By.XPATH, '//*[@id="listUl"]/li[' + str(image_count) + ']/div/div/div/div[1]').text
             product_price = dr.find_element(By.XPATH, '//*[@id="listUl"]/li[' + str(image_count) + ']/div/div/div/div[2]/span').text
             imgUrl = dr.find_element(By.XPATH, '//*[@id="listUl"]/li[' + str(image_count) + ']/div/div/img').get_attribute("src")
             urllib.request.urlretrieve(imgUrl, str(image_full_count) + ".jpg")
             f.write(str(image_full_count) + '-SEVEN-ONE_PLUS_ONE-' + product_name + '-' + product_price + '\n')
-            print(product_name + "_" + product_price)
         image_full_count = image_full_count + 1
         image_count = image_count + 1
         li_count = li_count + 1
@@ -112,7 +110,7 @@ while True:
         else:
             page_down = dr.find_element(By.XPATH, '//*[@id="moreImg"]/a')
         page_down.send_keys('\n')
-        time.sleep(2)
+        time.sleep(1)
         scroll_count = scroll_count + 1
     except:
         break
@@ -131,14 +129,12 @@ while True:
             imgUrl = dr.find_element(By.XPATH, '//*[@id="listUl"]/li[' + str(image_count) + ']/div/img').get_attribute("src")
             urllib.request.urlretrieve(imgUrl, str(image_full_count) + ".jpg")
             f.write(str(image_full_count) + '-SEVEN-TWO_PLUS_ONE-' + product_name + '-' + product_price + '\n')
-            print(product_name + "_" + product_price)
         else:
             product_name = dr.find_element(By.XPATH, '//*[@id="listUl"]/li[' + str(image_count) + ']/div/div/div/div[1]').text
             product_price = dr.find_element(By.XPATH, '//*[@id="listUl"]/li[' + str(image_count) + ']/div/div/div/div[2]/span').text
             imgUrl = dr.find_element(By.XPATH, '//*[@id="listUl"]/li[' + str(image_count) + ']/div/div/img').get_attribute("src")
             urllib.request.urlretrieve(imgUrl, str(image_full_count) + ".jpg")
             f.write(str(image_full_count) + '-SEVEN-TWO_PLUS_ONE-' + product_name + '-' + product_price + '\n')
-            print(product_name + "_" + product_price)
         image_full_count = image_full_count + 1
         image_count = image_count + 1
         li_count = li_count + 1

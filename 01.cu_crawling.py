@@ -22,7 +22,7 @@ f_dir = 'C:/Users/KimBumYun/Desktop/Github/2023/CAPSTONE_DESIGN_Crawling/'
 # 02. 시간 설정
 now = time.localtime()
 f_name = '%04d-%02d-%02d-%02d-%02d-%02d' %(now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec)
-dir_name = '사진저장'
+dir_name = 'CU-사진저장'
 
 # 03. 이미지 저장 폴더 설정
 os.makedirs(f_dir + f_name + '-' + dir_name)
@@ -34,7 +34,7 @@ f = open(f_name + '.txt', 'w')
 
 s_time = time.time()
 
-# 05. 웹 열기
+# 05. 1+1 웹 열기
 dr = webdriver.Chrome("/chromedriver.exe")
 dr.set_window_size(1000, 1000)
 dr.get('https://cu.bgfretail.com/event/plus.do?category=event&depth2=1&sf=N')
@@ -45,7 +45,7 @@ choose = dr.find_element(By.XPATH, '//*[@id="contents"]/div[1]/ul/li[2]/a')
 choose.send_keys('\n')
 time.sleep(2)
 
-# 07. 스크롤
+# 07. 1+1 스크롤
 scroll_count = 0
 while True:
     try:
@@ -59,7 +59,7 @@ while True:
 dr.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 time.sleep(1)
 
-# 08. 이미지 다운로드
+# 08. 1+1 이미지 다운로드
 images = dr.find_elements(By.CSS_SELECTOR, 'img.prod_img')
 
 ul_count = 1
@@ -73,8 +73,8 @@ while True:
         product_price = dr.find_element(By.XPATH, '//*[@id="contents"]/div[2]/div/ul[' + str(ul_count) + ']/li[' + str(li_count) + ']/a/div[1]/div[2]/div[2]/strong').text
         f.write(str(image_full_count) + '-CU-ONE_PLUS_ONE-' + product_name + '-' + product_price + '\n')
         imgUrl = dr.find_elements(By.CSS_SELECTOR, "img.prod_img")[image_count-1].get_attribute("src")
-        os.system("curl " + imgUrl + " > " + str(image_full_count) + ".jpg")
-        #urllib.request.urlretrieve(imgUrl, str(image_full_count) + ".jpg")
+        #os.system("curl " + imgUrl + " > " + str(image_full_count) + ".jpg")
+        urllib.request.urlretrieve(imgUrl, str(image_full_count) + ".jpg")
         image_full_count = image_full_count + 1
         image_count = image_count + 1
         li_count = li_count + 1
@@ -93,12 +93,12 @@ while True:
     except:
         break
 
-# 09. 2+1
+# 09. 2+1 페이지 이동
 choose = dr.find_element(By.XPATH, '//*[@id="contents"]/div[1]/ul/li[3]/a')
 choose.send_keys('\n')
 time.sleep(2)
 
-# 10. 스크롤
+# 10. 2+1 스크롤
 scroll_count = 0
 while True:
     try:
@@ -112,7 +112,7 @@ while True:
 dr.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 time.sleep(1)
 
-# 11. 이미지 다운로드
+# 11. 2+1 이미지 다운로드
 images = dr.find_elements(By.CSS_SELECTOR, 'img.prod_img')
 
 ul_count = 1

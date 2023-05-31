@@ -22,36 +22,35 @@ f_dir = 'C:/Users/KimBumYun/Desktop/Github/2023/CAPSTONE_DESIGN_Crawling/'
 # 02. 시간 설정
 now = time.localtime()
 f_name = '%04d-%02d-%02d-%02d-%02d-%02d' %(now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec)
-dir_name = '사진저장'
+dir_name = 'GS25-사진저장'
 
 # 03. 이미지 저장 폴더 설정
-os.makedirs(f_dir+f_name+'-'+dir_name)
-os.chdir(f_dir+f_name+'-'+dir_name)
-f_result_dir='GS25'+f_name+'-'+dir_name
+os.makedirs(f_dir + f_name + '-' + dir_name)
+os.chdir(f_dir + f_name + '-' + dir_name)
+f_result_dir = 'GS25' + f_dir + f_name + '-' + dir_name
 
+# 04. 상품 이름, 가격 저장 txt
 f = open(f_name + '.txt', 'w')
 
 s_time = time.time()
 
-# 04. 웹 열기
+# 05. 웹 열기
 dr = webdriver.Chrome("/chromedriver.exe")
 dr.set_window_size(1000, 1000)
 dr.get('http://gs25.gsretail.com/gscvs/ko/products/event-goods')
-#dr.get('http://gs25.gsretail.com/products/event-goods?uiel=Mobile')
 time.sleep(1)
 
-# 05. 1+1 페이지
+# 06. 1+1 페이지
 oneone_page = dr.find_element(By.XPATH, '//*[@id="ONE_TO_ONE"]')
-#twoone_page = dr.find_element(By.XPATH, '//*[@id="TWO_TO_ONE"]')
 oneone_page.send_keys('\n')
-#twoone_page.send_keys('\n')
 
 images = dr.find_elements(By.CSS_SELECTOR, 'img')
 
 li_count = 1
 image_count = 1
 image_full_count = 1
-'''
+
+# 07. 1+1 이미지 다운로드
 while True:
     try:
         if int(li_count) == 9:
@@ -65,7 +64,6 @@ while True:
         imgUrl = dr.find_element(By.XPATH, '//*[@id="contents"]/div[2]/div[3]/div/div/div[1]/ul/li[' + str(li_count) + ']/div/p[1]/img').get_attribute("src")
         #os.system("curl " + imgUrl + " > " + str(image_full_count) + ".jpg")
         urllib.request.urlretrieve(imgUrl, str(image_full_count) + ".jpg")
-        print(imgUrl)
         li_count = li_count + 1
         image_count = image_count + 1
         image_full_count = image_full_count + 1
@@ -84,7 +82,8 @@ while True:
         continue
     except:
         break
-'''
+
+# 08. 2+1 페이지
 choose = dr.find_element(By.XPATH, '//*[@id="TWO_TO_ONE"]')
 choose.send_keys('\n')
 time.sleep(2)
@@ -94,6 +93,7 @@ images = dr.find_elements(By.CSS_SELECTOR, 'img')
 li_count = 1
 image_count = 1
 
+# 09. 2+1 이미지 다운로드
 while True:
     try:
         if int(li_count) == 9:
@@ -105,11 +105,8 @@ while True:
         product_price = dr.find_element(By.XPATH, '//*[@id="contents"]/div[2]/div[3]/div/div/div[2]/ul/li[' + str(li_count) + ']/div/p[3]/span').text
         f.write(str(image_full_count) + '-GS25-TWO_PLUS_ONE-' + product_name + '-' + product_price + '\n')
         imgUrl = dr.find_element(By.XPATH, '//*[@id="contents"]/div[2]/div[3]/div/div/div[2]/ul/li[' + str(li_count) +']/div/p[1]/img').get_attribute("src")
-        if imgUrl == None:
-            print(image_full_count)
         #os.system("curl " + imgUrl + " > " + str(image_full_count) + ".jpg")
         urllib.request.urlretrieve(imgUrl, str(image_full_count) + ".jpg")
-        print(imgUrl)
         li_count = li_count + 1
         image_count = image_count + 1
         image_full_count = image_full_count + 1
@@ -128,6 +125,9 @@ while True:
         continue
     except:
         break
+
+# 10. 추출내용 정리
+f.close()
 
 e_time = time.time()#끝난시간 체크
 

@@ -29,11 +29,12 @@ os.makedirs(f_dir + f_name + '-' + dir_name)
 os.chdir(f_dir + f_name + '-' + dir_name)
 f_result_dir = 'SEVEN' + f_name + '-'+ dir_name
 
+# 04. 상품 이름, 가격 저장 txt
 f = open(f_name + '.txt', 'w')
 
 s_time = time.time()
 
-# 04. 웹 열기
+# 05. 1+1 웹 열기
 dr = webdriver.Chrome("/chromedriver.exe")
 dr.set_window_size(1000, 1000)
 dr.get('http://www.7-eleven.co.kr/product/presentList.asp')
@@ -43,7 +44,7 @@ time.sleep(1)
 oneone_page = dr.find_element(By.XPATH, '//*[@id="actFrm"]/div[3]/div[1]/ul/li[1]/a')
 oneone_page.send_keys('\n')
 
-# 06. 스크롤
+# 06. 1+1 스크롤
 scroll_count = 0
 
 while True:
@@ -61,7 +62,7 @@ while True:
 dr.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 time.sleep(1)
 
-# 06. 이미지 다운로드
+# 07. 1+1 이미지 다운로드
 images = dr.find_elements(By.CSS_SELECTOR, 'img')
 
 li_count = 1
@@ -97,12 +98,13 @@ while True:
     except:
         break
 
+# 08. 2+1 페이지 이동
 choose = dr.find_element(By.XPATH, '//*[@id="actFrm"]/div[3]/div[1]/ul/li[2]/a')
 choose.send_keys('\n')
 time.sleep(2)
 
 scroll_count = 0
-# 06. 스크롤
+# 09. 2+1 스크롤
 while True:
     try:
         if scroll_count == 0:
@@ -121,6 +123,7 @@ time.sleep(1)
 li_count = 1
 image_count = 2
 
+# 10. 2+1 이미지 다운로드
 while True:
     try:
         if image_count <= 14:
@@ -149,6 +152,9 @@ while True:
         continue
     except:
         break
+
+# 11. 추출내용 정리
+f.close()
 
 e_time = time.time()#끝난시간 체크
 

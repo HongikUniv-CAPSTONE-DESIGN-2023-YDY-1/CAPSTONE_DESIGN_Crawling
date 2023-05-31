@@ -17,22 +17,24 @@ from urllib.error import URLError, HTTPError
 
 # 01. 이미지 저장 폴더 설정
 f_dir = 'C:/Users/KimBumYun/Desktop/Github/2023/CAPSTONE_DESIGN_Crawling/'
+#f_dir = input('이미지를 저장할 폴더(예:C:/Users/) : ')
 
 # 02. 시간 설정
 now = time.localtime()
 f_name = '%04d-%02d-%02d-%02d-%02d-%02d' %(now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec)
-dir_name = '사진저장'
+dir_name = 'EMART24-사진저장'
 
 # 03. 이미지 저장 폴더 설정
 os.makedirs(f_dir + f_name + '-' + dir_name)
 os.chdir(f_dir + f_name + '-' + dir_name)
 f_result_dir = 'EMART24-' + f_dir + f_name + '-' + dir_name
 
+# 04. 상품 이름, 가격 저장 txt
 f = open(f_name + '.txt', 'w')
 
 s_time = time.time()
 
-# 04. 1+1 웹 열기
+# 05. 1+1 웹 열기
 dr = webdriver.Chrome("/chromedriver.exe")
 dr.set_window_size(1000, 1000)
 dr.get('https://www.emart24.co.kr/goods/event?search=&category_seq=1&align=')
@@ -45,7 +47,7 @@ image_count = 1
 image_full_count = 1
 page_count = 1
 
-# 05. 이미지 다운로드
+# 06. 이미지 다운로드
 while True:
     try:
         if int(li_count) == 21:
@@ -53,9 +55,7 @@ while True:
             page_count = page_count + 1
             dr.get('https://www.emart24.co.kr/goods/event?search=&page=' + str(page_count) + '&category_seq=1&align=')
         product_name = dr.find_element(By.XPATH, '/html/body/div[2]/div/section[4]/div[' + str(li_count) + ']/div[3]/div/p/a').text
-        print(product_name)
         product_price = dr.find_element(By.XPATH, '/html/body/div[2]/div/section[4]/div[' + str(li_count) + ']/div[3]/span/a').text
-        print(product_price)
         f.write(str(image_full_count) + '-EMART24-ONE_PLUS_ONE-' + product_name + '-' + product_price + '\n')
         imgUrl = dr.find_element(By.XPATH, '/html/body/div[2]/div/section[4]/div[' + str(li_count) + ']/div[2]/img').get_attribute("src")
         #os.system("curl " + imgUrl + " > " + str(image_full_count) + ".jpg")
@@ -75,7 +75,7 @@ while True:
     except:
         break
 
-# 06. 2+1 웹 열기
+# 07. 2+1 웹 열기
 choose = dr.find_element(By.XPATH, '/html/body/div[2]/div/section[3]/ul/li[3]/a')
 choose.send_keys('\n')
 time.sleep(2)
@@ -86,7 +86,7 @@ li_count = 1
 image_count = 1
 page_count = 1
 
-# 07. 이미지 다운로드
+# 08. 이미지 다운로드
 while True:
     try:
         if int(li_count) == 21:
@@ -94,9 +94,7 @@ while True:
             page_count = page_count + 1
             dr.get('https://www.emart24.co.kr/goods/event?search=&page=' + str(page_count) + '&category_seq=2&align=')
         product_name = dr.find_element(By.XPATH, '/html/body/div[2]/div/section[4]/div[' + str(li_count) + ']/div[3]/div/p/a').text
-        print(product_name)
         product_price = dr.find_element(By.XPATH, '/html/body/div[2]/div/section[4]/div[' + str(li_count) + ']/div[3]/span/a').text
-        print(product_price)
         f.write(str(image_full_count) + '-EMART24-TWO_PLUS_ONE-' + product_name + '-' + product_price + '\n')
         imgUrl = dr.find_element(By.XPATH, '/html/body/div[2]/div/section[4]/div[' + str(li_count) + ']/div[2]/img').get_attribute("src")
         #os.system("curl " + imgUrl + " > " + str(image_full_count) + ".jpg")
@@ -116,7 +114,9 @@ while True:
     except:
         break
         
-# 08. 추출내용 정리
+# 09. 추출내용 정리
+f.close()
+
 e_time = time.time()#끝난시간 체크
 
 t_time = e_time - s_time #크롤링에 쓰인 시간 

@@ -125,8 +125,8 @@ while True:
         product_price = dr.find_element(By.XPATH, '//*[@id="contents"]/div[2]/div/ul[' + str(ul_count) + ']/li[' + str(li_count) + ']/a/div[1]/div[2]/div[2]/strong').text
         f.write(str(image_full_count) + '-CU-ONE_PLUS_ONE-' + product_name + '-' + product_price + '\n')
         imgUrl = dr.find_elements(By.CSS_SELECTOR, "img.prod_img")[image_count-1].get_attribute("src")
-        os.system("curl " + imgUrl + " > " + str(image_full_count) + ".jpg")
-        #urllib.request.urlretrieve(imgUrl, str(image_full_count) + ".jpg")
+        #os.system("curl " + imgUrl + " > " + str(image_full_count) + ".jpg")
+        urllib.request.urlretrieve(imgUrl, str(image_full_count) + ".jpg")
         image_full_count = image_full_count + 1
         image_count = image_count + 1
         li_count = li_count + 1

@@ -14,6 +14,8 @@ import os
 import pyautogui
 from urllib.request import urlopen
 from urllib.error import URLError, HTTPError
+import socket
+from selenium.common.exceptions import ElementClickInterceptedException, NoSuchElementException, ElementNotInteractableException
 
 # 01. 이미지 저장 폴더 설정
 f_dir = 'C:/Users/KimBumYun/Desktop/Github/2023/CAPSTONE_DESIGN_Crawling/'
@@ -47,19 +49,25 @@ image_count = 1
 image_full_count = 1
 page_count = 1
 
-# 06. 이미지 다운로드
+# 06. 1+1 이미지 다운로드
 while True:
     try:
         if int(li_count) == 21:
             li_count = 1
             page_count = page_count + 1
             dr.get('https://www.emart24.co.kr/goods/event?search=&page=' + str(page_count) + '&category_seq=1&align=')
+        print(image_full_count)
+        if image_full_count == 35:
+            image_full_count = image_full_count + 1
+            image_count = image_count + 1
+            li_count = li_count + 1
+            pass
         product_name = dr.find_element(By.XPATH, '/html/body/div[2]/div/section[4]/div[' + str(li_count) + ']/div[3]/div/p/a').text
         product_price = dr.find_element(By.XPATH, '/html/body/div[2]/div/section[4]/div[' + str(li_count) + ']/div[3]/span/a').text
         f.write(str(image_full_count) + '-EMART24-ONE_PLUS_ONE-' + product_name + '-' + product_price + '\n')
         imgUrl = dr.find_element(By.XPATH, '/html/body/div[2]/div/section[4]/div[' + str(li_count) + ']/div[2]/img').get_attribute("src")
-        #os.system("curl " + imgUrl + " > " + str(image_full_count) + ".jpg")
         urllib.request.urlretrieve(imgUrl, str(image_full_count) + ".jpg")
+        #os.system("curl " + imgUrl + " > " + str(image_full_count) + ".jpg")
         li_count = li_count + 1
         image_count = image_count + 1
         image_full_count = image_full_count + 1
@@ -86,7 +94,7 @@ li_count = 1
 image_count = 1
 page_count = 1
 
-# 08. 이미지 다운로드
+# 08. 2+1 이미지 다운로드
 while True:
     try:
         if int(li_count) == 21:

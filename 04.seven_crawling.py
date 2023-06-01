@@ -22,7 +22,7 @@ f_dir = 'C:/Users/KimBumYun/Desktop/Github/2023/CAPSTONE_DESIGN_Crawling/'
 # 02. 시간 설정
 now = time.localtime()
 f_name = '%04d-%02d-%02d-%02d-%02d-%02d' %(now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec)
-dir_name = '사진저장'
+dir_name = 'SEVEN-사진저장'
 
 # 03. 이미지 저장 폴더 설정
 os.makedirs(f_dir + f_name + '-' + dir_name)
@@ -54,7 +54,7 @@ while True:
         else:
             page_down = dr.find_element(By.XPATH, '//*[@id="moreImg"]/a')
         page_down.send_keys('\n')
-        time.sleep(1)
+        time.sleep(5)
         scroll_count = scroll_count + 1
     except:
         break
